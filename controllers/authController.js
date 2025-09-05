@@ -13,7 +13,7 @@ exports.registerUser = async (req, res) => {
  
   try {
     const { name, email, password } = req.body;
-
+       console.log("Signup request body:", req.body)
     // check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
@@ -77,8 +77,10 @@ exports.forgotPassword=async (req,res)=>{
         await user.save({ validateBeforeSave: false });
 
          // Create reset URL
-        const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/reset-password/${resetToken}`;
-         
+        //const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/reset-password/${resetToken}`;
+         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+
+
         // 4️ Message content
     const message = `
       <h2>Password Reset Request</h2>

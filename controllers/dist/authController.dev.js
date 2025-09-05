@@ -26,18 +26,19 @@ exports.registerUser = function _callee(req, res) {
       switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          _req$body = req.body, name = _req$body.name, email = _req$body.email, password = _req$body.password; // check if user exists
+          _req$body = req.body, name = _req$body.name, email = _req$body.email, password = _req$body.password;
+          console.log("Signup request body:", req.body); // check if user exists
 
-          _context.next = 4;
+          _context.next = 5;
           return regeneratorRuntime.awrap(User.findOne({
             email: email
           }));
 
-        case 4:
+        case 5:
           userExists = _context.sent;
 
           if (!userExists) {
-            _context.next = 7;
+            _context.next = 8;
             break;
           }
 
@@ -45,15 +46,15 @@ exports.registerUser = function _callee(req, res) {
             message: "User already exists"
           }));
 
-        case 7:
-          _context.next = 9;
+        case 8:
+          _context.next = 10;
           return regeneratorRuntime.awrap(User.create({
             name: name,
             email: email,
             password: password
           }));
 
-        case 9:
+        case 10:
           _user = _context.sent;
           res.status(201).json({
             _id: _user._id,
@@ -61,23 +62,23 @@ exports.registerUser = function _callee(req, res) {
             email: _user.email,
             token: generateToken(_user._id)
           });
-          _context.next = 17;
+          _context.next = 18;
           break;
 
-        case 13:
-          _context.prev = 13;
+        case 14:
+          _context.prev = 14;
           _context.t0 = _context["catch"](0);
           console.error("Register error:", _context.t0);
           res.status(500).json({
             message: "Server error"
           });
 
-        case 17:
+        case 18:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 13]]);
+  }, null, null, [[0, 14]]);
 };
 
 exports.loginUser = function _callee2(req, res) {
@@ -186,7 +187,8 @@ exports.forgotPassword = function _callee3(req, res) {
 
         case 10:
           // Create reset URL
-          resetUrl = "".concat(req.protocol, "://").concat(req.get("host"), "/api/auth/reset-password/").concat(resetToken); // 4️ Message content
+          //const resetUrl = `${req.protocol}://${req.get("host")}/api/auth/reset-password/${resetToken}`;
+          resetUrl = "".concat(process.env.FRONTEND_URL, "/reset-password/").concat(resetToken); // 4️ Message content
 
           message = "\n      <h2>Password Reset Request</h2>\n      <p>Please click the link below to reset your password:</p>\n      <a href=\"".concat(resetUrl, "\" target=\"_blank\">").concat(resetUrl, "</a>\n      <p>This link will expire in 10 minutes.</p>\n    "); //  Send email
 
